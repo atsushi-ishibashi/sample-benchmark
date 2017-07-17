@@ -1,0 +1,6 @@
+package: github.com/atsushi-ishibashi/sample-benchmark
+import:
+- package: gopkg.in/vmihailenco/msgpack.v2
+  version: ~3.1.0
+  subpackages:
+  - codes
