@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"testing"
+	"unsafe"
 )
 
 var (
@@ -10,7 +12,7 @@ var (
 )
 
 func init() {
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000; i++ {
 		e := Element{
 			BICD:  i,
 			Code:  fmt.Sprintf("code%d", i),
@@ -22,16 +24,18 @@ func init() {
 
 func TestMsgpack(t *testing.T) {
 	payload := MsgpackSerialize(testElements)
+	log.Printf("msgpack size: %d\n", unsafe.Sizeof(payload))
 	decode := MsgpackDeserialize(payload)
-	if len(decode) != 100 {
+	if len(decode) != 1000 {
 		t.Errorf("error")
 	}
 }
 
 func TestJSON(t *testing.T) {
 	payload := JSONSerialize(testElements)
+	log.Printf("json size: %d\n", unsafe.Sizeof(payload))
 	decode := JSONDeserialize(payload)
-	if len(decode) != 100 {
+	if len(decode) != 1000 {
 		t.Errorf("error")
 	}
 }
@@ -47,5 +51,19 @@ func BenchmarkJSON(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		payload := JSONSerialize(testElements)
 		_ = JSONDeserialize(payload)
+	}
+}
+
+func BenchmarkPMsgpack(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		payload := MsgpackPSerialize(testElements)
+		_ = MsgpackPDeserialize(payload)
+	}
+}
+
+func BenchmarkPJSON(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		payload := JSONPSerialize(testElements)
+		_ = JSONPDeserialize(payload)
 	}
 }

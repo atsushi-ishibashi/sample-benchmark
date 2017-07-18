@@ -33,3 +33,25 @@ func JSONDeserialize(payload []byte) []Element {
 	json.Unmarshal(payload, &elements)
 	return elements
 }
+
+func MsgpackPSerialize(elements []Element) []byte {
+	payload, _ := msgpack.Marshal(&elements)
+	return payload
+}
+
+func MsgpackPDeserialize(payload []byte) []Element {
+	var elements []Element
+	msgpack.Unmarshal(payload, &elements)
+	return elements
+}
+
+func JSONPSerialize(elements []Element) []byte {
+	payload, _ := json.Marshal(&elements)
+	return payload
+}
+
+func JSONPDeserialize(payload []byte) []Element {
+	var elements []Element
+	json.Unmarshal(payload, &elements)
+	return elements
+}
